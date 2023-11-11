@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 311628323580442888}
   - component: {fileID: 3312929727467873360}
   - component: {fileID: 5639060023333419471}
+  - component: {fileID: 291833429174204220}
   m_Layer: 0
   m_Name: MurasakiBall
   m_TagString: Untagged
@@ -122,3 +123,17 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &291833429174204220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1573118145938196217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7847e53a285eb844b8a79b38b9dab1a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isAdd: 0
+  kind0fld: 0
