@@ -4,6 +4,77 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    private GameObject GetCurrentTarget()
+    {
+        GameObject atDeleteTarget = null;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit2D hit2d = Physics2D.Raycast((Vector2)ray.origin, (Vector2)ray.direction);
+
+        if (hit2d)
+        {
+            atDeleteTarget = hit2d.transform.gameObject;
+        }
+        return atDeleteTarget;
+    }
+
+    private List<GameObject> removableBallList = new List<GameObject>();
+    private CommonBall firstBall = null;
+    private void OnDragStart()
+    {
+        GameObject targetObject = GetCurrentTarget();
+        removableBallList.Clear();
+        if (targetObject)
+        {
+            if(targetObject.name.IndexOf("Ball") != -1)
+            {
+                firstBall = targetObject.GetComponent<CommonBall>();
+                removableBallList.Add(targetObject);
+                firstBall.isAdd = true;
+            }
+        }
+    }
+
+    private void OnDragging()
+    {
+        GameObject targetObject = GetCurrentTarget();
+        if (targetObject)
+        {
+            if(targetObject.name.IndexOf("Ball") != -1)
+            {
+                CommonBall targetBall = targetObject.transform.GetComponent<CommonBall>();
+                if(targetBall.kind0fld == firstBall.kind0fld)
+                {
+                    if(targetBall.isAdd == false)
+                    {
+                        removableBallList.Add(targetObject);
+                        targetBall.isAdd = true;
+                    }
+                }
+            }
+        }
+    }
+
+    private void OnDragEnd()
+    {
+        firstBall = null;
+        int length = removableBallList.Count;
+        if (length >= 3)
+        {
+            foreach (GameObject ball in removableBallList)
+            {
+                Destroy(ball);
+            }
+        }
+        else
+        {
+            foreach (GameObject ball in removableBallList)
+            {
+                ball.GetComponent<CommonBall>().isAdd = false;
+            }
+        }
+    }
+
     int nowBall;
     int beforeBall;
     int RANDOM_INDEX;
@@ -50,14 +121,27 @@ public class GameManager : MonoBehaviour
         }
     }
     public GameObject[] ballPrefabs;
+    private bool isDragged = false;
     void Start()
     {
-        StartCoroutine("DropBall");
+        StartCoroutine(DropBall());
     }
-
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        if(Input.GetMouseButtonDown(0) && isDragged == false)
+        {
+            isDragged = true;
+            OnDragStart();
+        }
+        else if(Input.GetMouseButton(0) && isDragged == true)
+        {
+            OnDragging();
+        }
+        else
+        {
+            isDragged = false;
+            OnDragEnd();
+        }
     }
 }
